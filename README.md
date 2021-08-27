@@ -1,2 +1,2 @@
-# CustomComponents-
+# CustomComponents
 Style component customization 
