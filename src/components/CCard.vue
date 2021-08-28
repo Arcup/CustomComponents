@@ -1,5 +1,8 @@
 <template>
-    <div id="card" class="card">
+    <div 
+       id="card" 
+       class="card"
+    >
         <div id="header" class="cardHeader">
             <h2>Yo soy el header</h2>
         </div>
@@ -8,7 +11,7 @@
             
         </div>
         <div id="button" class="cardButton">
-            por qué?
+            Aceptar
         </div>
     </div>
 </template>
@@ -23,10 +26,12 @@ export default {
     $width-card: 300px
     $height-card: 500px    
     $radius-card: 3px
+    $radius-button-card: 3px
     $body-color-card: #f8f8f8ff 
     $border-color-card: #73f3f3ff
     $button-color-card: #161e2eff
     $header-color-card: #ffffffff
+    $text-align-card: center
 
     .card
         position: relative
@@ -35,6 +40,7 @@ export default {
         border-radius: $radius-card
         border: 1px solid $border-color-card
         background-color: $body-color-card
+        text-align: $text-align-card
 
     .cardHeader
         width: 100%
@@ -49,7 +55,10 @@ export default {
         position: absolute
         width: 90%
         height: auto 
-        text-align: center
+        margin-bottom: 5px
+        border-radius: $radius-button-card
+        margin-left: 5%
         bottom: 0
+        color: white
         background-color: $button-color-card 
 </style>
