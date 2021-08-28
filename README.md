@@ -1,4 +1,4 @@
-# custom-components
+# CustomComponents
 
 ## Project setup
 ```
