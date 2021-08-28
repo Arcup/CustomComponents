@@ -12,7 +12,7 @@
 
       <v-col class="mb-4">
         <h1 class="display-2 font-weight-bold mb-3">
-          <div>Welcome to the Vuetify 3 Alpha Prueba 234566</div>
+          <div>Welcome to the Vuetify 3</div>
         </h1>
 
 
