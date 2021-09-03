@@ -1,24 +1,43 @@
 export const style = {
+    "card": {
+        "width": "40%",
+        "border-color": "#02E9E9",
+        "border-width": "3px",
+        "border-radius": "25px",
+        "border-style": "solid",
+        "background": "#414141",
+        
+    },
     "title": {
         "border": "red",
-        "background": "#00D4DA",
-        "width": "60%",
         "color": "black",
-        "font-size": "23px",
+        "font-size": "28px",
         "font-weight": "bold",
     },
     "subTitle": {
         "border": "black",
-        "background": "#414141",
-        "width": "60%",
         "color": "white",
-        "font-size": "23px",
-        "font-weight": "bold",
-    }
+        "font-size": "20px",
+    },
+    "description": {
+        "border": "black",
+        "color": "white",
+        "font-size": "17px",
+    },
+    "button": {
+        "border-color": "#02E9E9",
+        "color": "#414141",
+        "border-width": "3px",
+        "border-radius": "25px",
+        "border-style": "solid",
+        "background": "#02E9E9",
+        
+    },
 }
 
 export const data = {
-    "title": "Compras de invierno",
-    "subTitle": "Catálogo completo de compras de diciembre - enero",
-    "description": "Titulo de prueba",
+    "title": "Unlimited music now",
+    "subTitle": "Good news!",
+    "description": "Listen to your favorite artists and albums whenever and wherever, online and offline.",
+    "button": "LISTEN NOW",
 }
