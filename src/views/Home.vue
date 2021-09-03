@@ -20,6 +20,14 @@ export default {
     CCard,
     TheNavigation,
   },
+  setup(props) {
+    const state = reactive({
+      color: "red",
+    })
+    return {
+      state,
+    }
+  }
 };
 </script>
 
