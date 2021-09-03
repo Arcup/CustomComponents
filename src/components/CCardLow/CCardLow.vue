@@ -1,11 +1,11 @@
 <template>
   <div class="padding_standar">
     <div :style="getStyle().title">
-    <div class="padding_standar">{{ getData().title }}</div>
-  </div>
-  <div :style="getStyle().subTitle">
-    <div class="padding_standar">{{ getData().subTitle }}</div>
-  </div>
+      <div class="padding_standar">{{ getData().title }}</div>
+    </div>
+    <div :style="getStyle().subTitle">
+      <div class="padding_standar">{{ getData().subTitle }}</div>
+    </div>
   </div>
 </template>
 
@@ -16,7 +16,6 @@ import { style, data } from "./index.js";
 export default {
   props: ["style", "data"],
   setup(props) {
-
     const getStyle = () => {
       for (const property in props.style) {
         for (const subProperty in props.style[property]) {
@@ -36,7 +35,6 @@ export default {
     return {
       getStyle,
       getData,
-      props,
     };
   },
 };
