@@ -1,6 +1,6 @@
 <template>
   <div id="card" class="card">
-    <div id="header" class="cardHeader">
+    <div id="header" class="cardHeader" :style="getStyleDos">
       <h2>Yo soy el header y este es mi contador: {{ contador }}</h2>
     </div>
     <div id="body" class="cardBody">
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 export default {
   props: [],
 
