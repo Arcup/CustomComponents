@@ -1,0 +1,12 @@
+@font-face {
+    font-family: ComfortaaBold;
+    src: url("../fonts/comfortaa/static/Comfortaa-Bold.ttf");
+}
+@font-face {
+    font-family: ComfortaaLight;
+    src: url("../fonts/comfortaa/static/Comfortaa-Light.ttf");
+}
+@font-face {
+    font-family: PoppinsRegular;
+    src: url("../fonts/poppins/Poppins-Regular.ttf");
+}

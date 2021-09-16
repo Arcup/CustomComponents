@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import vuetify from './plugins/vuetify'
 import App from './App.vue'
 import router from './router'
+import './assets/styles/_global.css'
 
 const app = createApp(App)
 app.use(router)

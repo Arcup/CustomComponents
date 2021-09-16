@@ -15,7 +15,7 @@ import HelloWorld from "../components/HelloWorld.vue";
 import CCard from "../components/CCard.vue";
 import CCardInfo from "../components/CCardInfo/CCardInfo.vue";
 import CCardLow from "../components/CCardLow/CCardLow.vue";
-import TheNavigation from "../components/layouts/TheNavigation.vue";
+import TheNavigation from "../components/layouts/Navigation/TheNavigation.vue";
 
 import { ref, reactive } from "vue";
 
@@ -52,5 +52,5 @@ export default {
 <style lang="sass" scoped>
 .container
   position: relative
-  margin-left: 22%
+  margin-left: 18rem
 </style>
