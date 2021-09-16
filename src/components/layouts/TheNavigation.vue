@@ -14,7 +14,14 @@
         <li class="list__element-first">
           Card componentes
           <ul>
-            <li class="list__element-second" v-for="card in cardList" :key="card.nombre">{{ card.nombre }}</li>
+            <li
+              class="list__element-second"
+              v-for="card in cardList"
+              :key="card.name"
+              @click="clickItemList(card.name, card.component)"
+            >
+              {{ card.name }}
+            </li>
           </ul>
         </li>
       </ul>
@@ -27,28 +34,29 @@ import { reactive } from "vue";
 
 export default {
   setup(props, { emit }) {
-    const cardList = reactive(
+    const cardList = reactive([
       {
-        nombre: "Card Information",
-        component: "",
+        name: "Card Information",
+        component: "CCardInfo",
       },
       {
-        nombre: "Card Low",
-        component: "",
-      }
-    );
+        name: "Card Low",
+        component: "CCardLow",
+      },
+    ]);
 
-    const clicNavigation = () => {
-      emit("clicNavigation");
+    const clickItemList = (name, component) => {
+      emit("clicItemList", name, component);
     };
 
     return {
       cardList,
-      clicNavigation,
+      clickItemList,
     };
   },
 };
 </script>
+
 <style lang="sass" scoped>
 .content
   height: 100%
