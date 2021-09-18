@@ -1,16 +1,20 @@
 <template>
-    <div>
-        <h1> {{ name}} </h1>
+    <div class="navbar_padding" style="background-color: #161e2e;">
+        <h1> {{name.charAt(0).toUpperCase() + name.slice(1)}} </h1>
+        <ul>
         <div v-for="style in getStyleSections()" :key="style.property">
-            <component 
-                v-bind:is="style.component" 
-                :name="style.property"
-                :config="style.config"
-                :value="style.value"
-                v-model="style.value"
-                @changeValue="changeValue">
-            </component>
+            <li class="navbar_padding_inputs">
+                <component 
+                    v-bind:is="style.component" 
+                    :name="style.property"
+                    :config="style.config"
+                    :value="style.value"
+                    v-model="style.value"
+                    @changeValue="changeValue">
+                </component>
+            </li>
         </div>
+        </ul>
     </div>
 </template>
 <script>
@@ -48,3 +52,40 @@ export default {
     }
 }
 </script>
+<style scoped>
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbar_padding {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-right: 5%;
+    padding-left: 5%;
+}
+
+.navbar_padding_inputs {
+    padding: 5px;
+}
+ 
+</style>

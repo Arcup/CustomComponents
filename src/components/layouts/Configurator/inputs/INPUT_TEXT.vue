@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label> {{ name }} </label><br>
+        <label> {{ name.charAt(0).toUpperCase() + name.slice(1) }} </label><br>
         <input type="text" v-model="value" @keyup="changeValue">
     </div>
 </template>
@@ -32,8 +32,8 @@ input[type=text]{
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     border-radius: 20px;
-    border: 1px solid black;
-    color: black;
+    border: 1px solid white;
+    color: white;
     width: 250px;
     height: 30px;
     padding-left: 10px;
@@ -42,6 +42,10 @@ input[type=text]{
 input[type=text]:focus {
     outline: none;
     border: 1px solid #02E9E9;
-    color: black;
+    color: white;
+}
+
+label {
+    color: white;
 }
 </style>

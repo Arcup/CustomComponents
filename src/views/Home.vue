@@ -1,14 +1,12 @@
 <template>
   <div>
+    <TheConfigurator :name="getNameSectionConfigurator" :section="getSectionConfigurator" @changeValue="changeValueSection"/>
     <TheNavigation @clic-item-list="setComponent" />
     <div id="container" class="container">
       <h1>{{ getNameComponent }}</h1>
       <!-- <keep-alive> -->
         <component v-bind:is="getComponent" :style="getStyleComponent"></component>
       <!-- </keep-alive> -->
-      <div style="float: right">
-        <TheConfigurator :name="getNameSectionConfigurator" :section="getSectionConfigurator" @changeValue="changeValueSection"/>
-      </div>
    </div>
   </div>
 </template>
