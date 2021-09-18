@@ -38,7 +38,7 @@ export default {
       getComponent.value = component;
     };
     const getComponent = ref("CCardInfo");
-    const getNameComponent = ref("Card info");
+    const getNameComponent = ref("Card Info");
     return {
       state,
       setComponent,
