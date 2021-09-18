@@ -1,7 +1,7 @@
 <template>
     <div>
         <label> {{ name }} </label><br>
-        <input v-model="value" @keyup="changeValue">
+        <input type="text" v-model="value" @keyup="changeValue">
     </div>
 </template>
 <script>
