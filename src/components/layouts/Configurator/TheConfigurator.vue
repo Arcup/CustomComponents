@@ -1,44 +1,49 @@
 <template>
     <div>
-        <h1> {{ section.name}} </h1>
-        <div v-for="style in section.styles" :key="style">
-        {{style}}
-            <CLoadForm :form="getForm(style)"/>
+        <h1> {{ name}} </h1>
+        <div v-for="style in getStyleSections()" :key="style.property">
+            <component 
+                v-bind:is="style.component" 
+                :name="style.property"
+                :config="style.config"
+                :value="style.value"
+                v-model="style.value"
+                @changeValue="changeValue">
+            </component>
         </div>
     </div>
 </template>
 <script>
-import { reactive } from "vue";
-import CLoadForm from "./styles/CLoadForm.vue"
-import { indexStyles } from "./styles/index.js"
+import { reactive, ref } from "vue";
+import { indexStyles } from "./index.js"
 
 export default {
-    components: {
-        CLoadForm,
-    },
     props: ["name", "section"],
-    setup(props) {
+    setup(props,{emit}) {
+
+        const name = ref(props.name)
 
         const getStyleSections = () => {
             var styles = []
             for (const property in props.section) {
-                styles.push(property)
+                styles.push({
+                    "property": property,
+                    "component": indexStyles[property].component,
+                    "config": indexStyles[property].config,
+                    "value": props.section[property],
+                })
             }
             return styles
         }
 
-        const getForm = (style) => {
-            return indexStyles[style];
+        const changeValue = (property, newValue) => {
+            emit("changeValue", property, newValue)
         }
-
-        const section = reactive({
-            name: props.name,
-            styles: getStyleSections(props.section)
-        })
         
         return {
-            section,
-            getForm,
+            name,
+            getStyleSections,
+            changeValue,
         }
     }
 }

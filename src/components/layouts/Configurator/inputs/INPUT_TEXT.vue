@@ -1,19 +1,27 @@
 <template>
     <div>
-        <input type="text"> {{form}}
+        <label> {{ name }} </label><br>
+        <input v-model="value" @keyup="changeValue">
     </div>
 </template>
 <script>
 import { ref } from "vue";
 
 export default {
-    props: ["form"],
-    setup(props) {
+    props: ["name", "value", "config"],
+    setup(props, {emit}) {
 
-        const form = ref(props.form)
+        const name = ref(props.name)
+        const value = ref(props.value)
+
+        const changeValue = () => {
+            emit("changeValue", props.name, value.value);
+        }
         
         return {
-            form,
+            name,
+            value,
+            changeValue,
         }
     }
 }

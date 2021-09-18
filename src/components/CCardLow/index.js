@@ -6,7 +6,6 @@ export const style = {
         "border-radius": "25px",
         "border-style": "solid",
         "background": "#414141",
-        
     },
     "title": {
         "border": "red",
