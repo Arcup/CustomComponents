@@ -1,8 +1,17 @@
 <template>
   <div>
     <ul class="list">
-      <li class="list__title" @click="displayList">
-        {{ title }}
+      <li class="list__title">
+        <h2 @click="displayList">
+          {{ title }}
+          <img
+            v-bind:src="
+              require(`./../../../assets/img/navigation/${arrowDisplay}`)
+            "
+            alt="up arrow list"
+            :class="'list__title-img-' + arrowStyle" 
+          />
+        </h2>
         <ul class="sublist" v-if="display">
           <li
             class="sublist__element"
@@ -36,16 +45,25 @@ export default {
     const title = props.title;
     const options = props.options;
     const display = ref(true);
+    const arrowDisplay = ref('arrow_down.png');
+    const arrowStyle = ref('down');
+
     const clickItem = (name, component) => {
       emit("clickItem", name, component);
     };
+
     const displayList = () => {
-      display.value = !display.value;
+      display.value = !display.value
+      arrowDisplay.value = !display.value ? 'arrow_right.png' : 'arrow_down.png'
+      arrowStyle.value = !display.value ? 'right' : 'down'
     };
+
     return {
       title,
       options,
       display,
+      arrowDisplay,
+      arrowStyle,
       clickItem,
       displayList,
     };
@@ -54,6 +72,8 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+h2
+  font-size: 1em
 .list
   list-style: none
   &__title
@@ -62,6 +82,15 @@ export default {
     margin-left: 2px
     font-size: 1.3em
     cursor: pointer
+    &-img-down
+      margin-left: 0.4em
+      margin-bottom: 0.08em
+      width: 0.6rem
+      height: 0.5rem
+    &-img-right
+      margin-left: 0.4em
+      width: 0.45rem
+      height: 0.65rem
 .sublist
   list-style: none
   margin-top: 5px

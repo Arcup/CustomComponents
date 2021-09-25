@@ -1,49 +1,68 @@
 <template>
   <div>
+    <TheConfigurator :name="getNameSectionConfigurator" :section="getSectionConfigurator" @changeValue="changeValueSection"/>
     <TheNavigation @clic-item-list="setComponent" />
     <div id="container" class="container">
       <h1>{{ getNameComponent }}</h1>
-      <keep-alive>
-        <component v-bind:is="getComponent"></component>
-      </keep-alive>
-    </div>
+      <!-- <keep-alive> -->
+        <component v-bind:is="getComponent" :style="getStyleComponent"></component>
+      <!-- </keep-alive> -->
+   </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from "../components/HelloWorld.vue";
-import CCard from "../components/CCard.vue";
-import CCardInfo from "../components/CCardInfo/CCardInfo.vue";
-import CCardLow from "../components/CCardLow/CCardLow.vue";
-import TheNavigation from "../components/layouts/Navigation/TheNavigation.vue";
+import { style } from "../components/CCardInfo/index.js";
 
-import { ref, reactive } from "vue";
+import TheNavigation from "../components/layouts/Navigation/TheNavigation.vue";
+import TheConfigurator from "../components/layouts/Configurator/TheConfigurator.vue";
+import { COMPONENTS } from "@/components/index.js"
+
+import { ref, shallowRef, reactive } from "vue";
 
 export default {
   name: "Home",
 
   components: {
-    HelloWorld,
-    CCard,
-    CCardInfo,
-    CCardLow,
     TheNavigation,
+    TheConfigurator,
   },
   setup(props) {
-    const state = reactive({
-      color: "red",
-    });
+
     const setComponent = (name, component) => {
       getNameComponent.value = name;
-      getComponent.value = component;
+      getComponent.value = COMPONENTS[component].COMPONENT;
+      getStyleComponent.value = COMPONENTS[component].STYLES
+
+      setSectionConfigurator(Object.keys(COMPONENTS[component].STYLES)[0], component);
     };
-    const getComponent = ref("CCardInfo");
-    const getNameComponent = ref("Card Info");
+
+    const setSectionConfigurator = (firstSectionStyles, component) => {
+      getNameSectionConfigurator.value = firstSectionStyles
+      getSectionConfigurator.value = COMPONENTS[component].STYLES[firstSectionStyles]
+      
+    };
+
+    const getSectionConfigurator = ref(COMPONENTS["CCardInfo"].STYLES["card"]);
+    const getNameSectionConfigurator = ref("card");
+
+
+    const getComponent = shallowRef(COMPONENTS["CCardInfo"].COMPONENT);
+    const getNameComponent = ref("Card info");
+    const getStyleComponent = ref(COMPONENTS["CCardInfo"].STYLES);
+
+    const changeValueSection = (property, newValue) => {
+      getStyleComponent.value[getNameSectionConfigurator.value][property] = newValue
+    }
+
     return {
-      state,
       setComponent,
+      changeValueSection,
       getNameComponent,
-      getComponent
+      getComponent,
+      getStyleComponent,
+      getSectionConfigurator,
+      getNameSectionConfigurator,
     };
   },
 };
