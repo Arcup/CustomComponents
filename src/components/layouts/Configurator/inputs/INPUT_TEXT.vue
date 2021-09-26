@@ -1,11 +1,11 @@
 <template>
     <div>
         <label> {{ name.charAt(0).toUpperCase() + name.slice(1) }} </label><br>
-        <input type="text" v-model="value" @keyup="changeValue">
+        <input type="text" spellcheck="false" v-model="value" @keyup="changeValue">
     </div>
 </template>
 <script>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 export default {
     props: ["name", "value", "config"],
@@ -33,16 +33,18 @@ input[type=text]{
     -moz-border-radius: 20px;
     border-radius: 20px;
     border: 1px solid white;
-    color: white;
-    width: 250px;
+    color: black;
+    width: 80%;
     height: 30px;
     padding-left: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
     
 input[type=text]:focus {
     outline: none;
-    border: 1px solid #02E9E9;
-    color: white;
+    border: 2px solid #02E9E9;
+    color: black;
 }
 
 label {

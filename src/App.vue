@@ -22,6 +22,7 @@ $large: 1200px
 
 html
   font-size: 100%
+  font-family: ComfortaaLight
 @media (max-width: $medium)
   html
     font-size: 62.5%
