@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div class="content">
       <section class="section__header">
         <h1 class="section__header-title">Cartmanmundi</h1>
@@ -11,12 +10,10 @@
           class="section__header-img"
         />
       </section>
-      <hr />
       <section class="section__list">
         <CItemList :title="cards.title" :options="cards.options" @clickItem="clickItemList"/>
       </section>
     </div>
-  </div>
 </template>
 
 <script>
@@ -55,13 +52,20 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-
-.content
-  height: 100%
-  width: 16rem
+.content 
+  width: 15rem
+  float: left
   position: fixed
-  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12)!important
-  z-index: 10
+  z-index: 1
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2),0 1px 1px 0 rgba(0,0,0,.14),0 1px 3px 0 rgba(0,0,0,.12)
+  top: 0
+  left: 0
+  bottom: 0
+  padding: 1em
+  transition: 0.5s
+  display: flex
+  flex-direction: column
+  overflow: auto
 
 .section__header
   margin-bottom: 10px
@@ -75,6 +79,8 @@ export default {
     width: 120px
     height: 70px
 .section__list
-  margin-top: 7px
-  margin-left: 15px
+  text-align: left
+  margin-top: 0.5em
+
+
 </style>
