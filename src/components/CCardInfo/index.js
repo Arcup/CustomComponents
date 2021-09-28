@@ -6,8 +6,8 @@ export const style = {
         "border-radius": "3px",
         "border": "1px",
         "border-style": "solid",
-        "border-color": "#73f3f3ff",
-        "background-color": "#f8f8f8ff",
+        "border-color": "#73f3f3",
+        "background-color": "#f8f8f8",
         "text-align": "center"
     },
 
@@ -15,7 +15,7 @@ export const style = {
         "width": "100%",
         "height": "166px",
         "top": "0",
-        "background-color": "#ffffffff"
+        "background-color": "#ffffff"
     }, 
 
     "body": {
@@ -31,7 +31,7 @@ export const style = {
         "margin-left": "5%",
         "bottom": "0",
         "color": "white",
-        "background-color": "#161e2eff",
+        "background-color": "#161e2e",
         "cursor": "pointer"
     }
 }

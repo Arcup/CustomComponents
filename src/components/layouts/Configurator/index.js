@@ -24,7 +24,7 @@ export const indexStyles = {
         "config": {}
     },
     "border-color": {
-        "component": forms["INPUT_TEXT"],
+        "component": forms["INPUT_COLOR"],
         "config": {}
     },
     "border-width": {
@@ -42,11 +42,11 @@ export const indexStyles = {
 
     // Background Values
     "background": {
-        "component": forms["INPUT_TEXT"],
+        "component": forms["INPUT_COLOR"],
         "config": {}
     },
     "background-color": {
-        "component": forms["INPUT_TEXT"],
+        "component": forms["INPUT_COLOR"],
         "config": {}
     },
 
