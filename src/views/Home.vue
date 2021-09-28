@@ -48,7 +48,7 @@ export default {
 
 
     const getComponent = shallowRef(COMPONENTS["CCardInfo"].COMPONENT);
-    const getNameComponent = ref("Card info");
+    const getNameComponent = ref("Card information");
     const getStyleComponent = ref(COMPONENTS["CCardInfo"].STYLES);
 
     const changeValueSection = (property, newValue) => {
