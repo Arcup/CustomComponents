@@ -47,7 +47,7 @@ export default {
   setup(props, { emit }) {
     const name = ref(props.name);
 
-    const collapsed = ref(true)
+    const collapsed = ref(false)
     const toggleSidebar = () => (collapsed.value = !collapsed.value)
     const SIDEBAR_WIDTH = 300
     const SIDEBAR_WIDTH_COLLAPSED = 38
