@@ -4,11 +4,11 @@
       <li class="list__title">
         <h2 @click="displayList">
           {{ title }}
-          <span v-if="display" class="collapse-icon">
-              <i class="fas fa-angle-down" />
+          <span v-if="display">
+              <i class="fas fa-angle-down list__title-icon" />
           </span>
-          <span v-else class="collapse-icon">
-              <i class="fas fa-angle-right" />
+          <span v-else>
+              <i class="fas fa-angle-right list__title-icon" />
           </span>
         </h2>
         <ul class="sublist" v-if="display">
@@ -76,16 +76,25 @@ h2
     margin-top: 0.6em
     left: 0
     font-size: 1.3em
+    color: #fff
     cursor: pointer
+    &-icon
+      width: 0.8em
+      height: 0.8em
 .sublist
   list-style: none
-  margin-top: 5px
+  margin-top: 0.4em
   &__element
     font-family: ComfortaaLight
     margin-left: 0.1em
-    margin-top: 0.3em
+    margin-top: 0.8em
     font-size: 0.7em
+    color: #fff
     cursor: pointer
-.collapse-icon
-  cursor: pointer
+    transition: 0.2s linear
+    &:hover
+      border-bottom: inset
+      border-bottom-color: var(--sidebar-item-hover)
+      border-bottom-right-radius: 0.5em
+      
 </style>
