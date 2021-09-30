@@ -4,12 +4,10 @@
       <li class="list__title">
         <h2 @click="displayList">
           {{ title }}
-          <span v-if="display">
-              <i class="fas fa-angle-down list__title-icon" />
+          <span :class="{ 'rotate-90': !display }" class="list__title-icon">
+            <i class="fas fa-angle-down"/>
           </span>
-          <span v-else>
-              <i class="fas fa-angle-right list__title-icon" />
-          </span>
+          
         </h2>
         <ul class="sublist" v-if="display">
           <li
@@ -19,6 +17,7 @@
             @click="clickItem(item.name, item.component)"
           >
             {{ item.name }}
+            <div class="sublist__element-border"></div>
           </li>
         </ul>
       </li>
@@ -50,7 +49,7 @@ export default {
     };
 
     const displayList = () => {
-      display.value = !display.value
+      display.value = !display.value;
     };
 
     return {
@@ -65,7 +64,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-
 h2
   font-size: 1em
 .list
@@ -81,20 +79,28 @@ h2
     &-icon
       width: 0.8em
       height: 0.8em
+      margin-top: 0.1em
+      margin-left: 0.7em
+      position: fixed
+      transition: 0.2s linear
 .sublist
   list-style: none
   margin-top: 0.4em
   &__element
     font-family: ComfortaaLight
-    margin-left: 0.1em
     margin-top: 0.8em
-    font-size: 0.7em
+    font-size: 0.8em
     color: #fff
     cursor: pointer
-    transition: 0.2s linear
+    &-border
+      width: 0%
+      transition: width 0.4s
     &:hover
-      border-bottom: inset
-      border-bottom-color: var(--sidebar-item-hover)
-      border-bottom-right-radius: 0.5em
-      
+      .sublist__element-border
+        width: 100%
+        border-bottom: solid
+        border-bottom-color: var(--sidebar-item-hover)
+        border-bottom-width: thin
+.rotate-90 
+  transform: rotate(-90deg)
 </style>

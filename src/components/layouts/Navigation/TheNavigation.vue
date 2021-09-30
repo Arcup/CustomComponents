@@ -43,6 +43,7 @@ export default {
           name: "Card Low",
           component: "CCardLow",
         },
+        
       ],
     });
 
