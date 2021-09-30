@@ -88,7 +88,7 @@ export default {
 
 .section__divider
   border: 0
-  display:block
+  display: block
   width: 96%             
   background-color:#FFF
   height: 1px
