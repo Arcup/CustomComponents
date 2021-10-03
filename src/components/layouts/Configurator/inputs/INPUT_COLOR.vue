@@ -8,7 +8,7 @@
 import { ref, watch } from "vue";
 
 export default {
-    props: ["name", "value", "config"],
+    props: ["name", "value", "section", "config"],
 
     setup(props, {emit}) {
 
@@ -16,7 +16,7 @@ export default {
         const value = ref(props.value)
 
         const changeValue = () => {
-            emit("changeValue", props.name, value.value);
+            emit("changeValue", props.section, props.name, value.value);
         }
         
         return {
@@ -33,8 +33,8 @@ export default {
 input[type="color"] {
 	-webkit-appearance: none;
 	border: none;
-	-webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
+	-webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
     border: none;
     color: black;
     width: 85%;

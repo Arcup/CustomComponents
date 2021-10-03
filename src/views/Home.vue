@@ -10,7 +10,7 @@
     <div id="container" class="container">
       <h1>{{ getNameComponent }}</h1>
       <!-- <keep-alive> -->
-      <component v-bind:is="getComponent" :style="getStyleComponent"></component>
+      <component :is="getComponent" :style="getStyleComponent"></component>
       <!-- </keep-alive> -->
     </div>
   </div>
@@ -30,38 +30,50 @@ export default {
     TheNavigation,
     TheConfigurator,
   },
+  
   setup(props) {
+    // Remueve las referencias al objeto default
+    const removeReference = (object) => {
+      return JSON.parse(JSON.stringify(object))
+    };
+
+    // Aisigna la información necesaria para comenzar a editar un nuevo componente
     const setComponent = (name, component) => {
       getNameComponent.value = name;
       getComponent.value = COMPONENTS[component].COMPONENT;
       getStyleComponent.value = COMPONENTS[component].STYLES;
-      resetValue = JSON.parse(JSON.stringify(COMPONENTS[component].STYLES))
+      resetValue = removeReference(COMPONENTS[component].STYLES)
 
       setSectionConfigurator(Object.keys(COMPONENTS[component].STYLES)[0], component);
     };
 
+    // Asigna una sección del componente al configurador
     const setSectionConfigurator = (firstSectionStyles, component) => {
       getNameSectionConfigurator.value = firstSectionStyles;
       getSectionConfigurator.value = COMPONENTS[component].STYLES[firstSectionStyles];
     };
 
-    const getSectionConfigurator = ref(COMPONENTS["CCardInfo"].STYLES["card"]);
+    // Variables para el funcionamiento del configurador
+    const getSectionConfigurator = ref(COMPONENTS["CCardLow"].STYLES["card"]);
     const getNameSectionConfigurator = ref("card");
 
-    const getComponent = shallowRef(COMPONENTS["CCardInfo"].COMPONENT);
-    const getNameComponent = ref("Card information");
-    const getStyleComponent = ref(COMPONENTS["CCardInfo"].STYLES);
+    // Variables para el funcionamiento del visor de componentes
+    const getComponent = shallowRef(COMPONENTS["CCardLow"].COMPONENT);
+    const getNameComponent = ref("Card Low");
+    const getStyleComponent = ref(COMPONENTS["CCardLow"].STYLES);
 
-    var resetValue = JSON.parse(JSON.stringify(COMPONENTS["CCardInfo"].STYLES))
+    // Valor por default de la sección activa del configurador
+    var resetValue = removeReference(COMPONENTS["CCardLow"].STYLES)
 
-    const changeValueSection = (property, newValue) => {
-      getStyleComponent.value[getNameSectionConfigurator.value][property] = newValue;
+    // Recibe los cambios de la sección activa (configurador) y los aplica al componente
+    const changeValueSection = (section, property, newValue) => {
+      getStyleComponent.value[getNameSectionConfigurator.value][section][property] = newValue;
     };
 
-    const resetComponent = () => {
+    // Reinicia la sección activa del configurador
+    const resetComponent = async () => {
       getStyleComponent.value[getNameSectionConfigurator.value] = resetValue[getNameSectionConfigurator.value]
       getSectionConfigurator.value = resetValue[getNameSectionConfigurator.value]
-
     };
 
     return {
