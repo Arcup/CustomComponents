@@ -4,7 +4,7 @@
       <li class="list__title">
         <h2 @click="displayList">
           {{ title }}
-          <span :class="{ 'rotate-90': !display }" class="list__title-icon">
+          <span :class="{ 'rotate-180': !display }" class="list__title-icon">
             <i class="fas fa-angle-down"/>
           </span>
           
@@ -17,7 +17,6 @@
             @click="clickItem(item.name, item.component)"
           >
             {{ item.name }}
-            <div class="sublist__element-border"></div>
           </li>
         </ul>
       </li>
@@ -66,14 +65,15 @@ export default {
 <style lang="sass" scoped>
 h2
   font-size: 1em
+  margin-bottom: 0.5em
 .list
   padding: 0
   list-style-type: none
   &__title
     font-family: ComfortaaBold
+    font-size: 1.3em
     margin-top: 0.6em
     left: 0
-    font-size: 1.3em
     color: #fff
     cursor: pointer
     &-icon
@@ -85,22 +85,23 @@ h2
       transition: 0.2s linear
 .sublist
   list-style: none
-  margin-top: 0.4em
+  width: 90%
+  padding-left: 1em
+  border-radius: 10px
+  background-color: #182133ff
+  transition: 0.1s linear
   &__element
     font-family: ComfortaaLight
-    margin-top: 0.8em
     font-size: 0.8em
+    margin-top: 0
+    left: 0
+    padding-top: 0.4em
+    padding-bottom: 0.4em
     color: #fff
     cursor: pointer
-    &-border
-      width: 0%
-      transition: width 0.4s
     &:hover
-      .sublist__element-border
-        width: 100%
-        border-bottom: solid
-        border-bottom-color: var(--sidebar-item-hover)
-        border-bottom-width: thin
-.rotate-90 
-  transform: rotate(-90deg)
+      opacity: 0.7
+      transition: 0.1s linear
+.rotate-180 
+  transform: rotate(180deg)
 </style>
