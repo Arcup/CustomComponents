@@ -7,22 +7,35 @@
         <button @click="resetComponent()">RESET</button>
       </span>
     </h1>
-    <div v-if="!collapsed">
-      <ul>
-        <div v-for="style in getStyleSections()" :key="style.property">
-          <li style="list-style-type: none">
-            <component
-              v-bind:is="style.component"
-              :name="style.property"
-              :config="style.config"
-              :value="style.value"
-              v-model="style.value"
-              @changeValue="changeValue"
+    <div v-show="!collapsed">
+        <div v-for="section in sections" :key="section.id">
+          <p class="section-styles" @click="section.active = !section.active">
+           <label class="section-title">
+            {{ section.section.charAt(0).toUpperCase() + section.section.slice(1).replace("_", " ") }} 
+            </label>
+           <span
+            :class="{ 'rotate-180': section.active }"
+            class="collapse-section"
             >
-            </component>
-          </li>
+              <i  class="fas fa-chevron-down" />
+            </span>
+          </p>
+          <div v-show="section.active">
+            <div v-for="data in section.data" :key="data.id">
+              <li style="list-style-type: none; padding-left: 20px;">
+                <component
+                  :is="data.component"
+                  :name="data.property"
+                  :value="data.value"
+                  :section="data.section"
+                  :config="data.config"
+                  @changeValue="changeValue"
+                >
+                </component>
+              </li>
+            </div>
+          </div>
         </div>
-      </ul>
     </div>
 
     <h1>
@@ -46,32 +59,52 @@ export default {
   props: ["name", "section"],
   setup(props, { emit }) {
     const name = ref(props.name);
+    const sections = ref([])
 
     const collapsed = ref(false)
     const toggleSidebar = () => (collapsed.value = !collapsed.value)
-    const SIDEBAR_WIDTH = 300
+    const SIDEBAR_WIDTH = 270
     const SIDEBAR_WIDTH_COLLAPSED = 38
     const sidebarWidth = computed(() => `${collapsed.value ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}px`)
 
-    watch(props.section, (count, prevCount) => {
-      getStyleSections()
-    })
-
     const getStyleSections = () => {
       var styles = [];
-      for (const property in props.section) {
-        styles.push({
-          property: property,
-          component: indexStyles[property].component,
-          config: indexStyles[property].config,
-          value: props.section[property],
-        });
+      var countIds = 0;
+      for (const section in props.section) {
+        var active = false;
+        if (countIds === 0) {
+          active = true;
+        }
+        var sectionAppend = {
+          id: countIds,
+          section: section,
+          active: active,
+          data: []
+        }
+        for (const property in props.section[section]) {
+          sectionAppend.data.push({
+            id: countIds,
+            section: section,
+            property: property,
+            component: indexStyles[property].component,
+            config: indexStyles[property].config,
+            value: props.section[section][property]
+          });
+          countIds++;
+        };
+        styles.push(sectionAppend)
       }
-      return styles;
+      sections.value = styles
     };
 
-    const changeValue = (property, newValue) => {
-      emit("changeValue", property, newValue);
+    getStyleSections()
+
+    watch(props.section, (count, prevCount) => {
+      getStyleSections()
+    })    
+
+    const changeValue = (section, property, newValue) => {
+      emit("changeValue", section, property, newValue);
     };
 
     const resetComponent = () => {
@@ -87,6 +120,7 @@ export default {
       getStyleSections,
       changeValue,
       resetComponent,
+      sections,
     };
   },
 };
@@ -95,7 +129,7 @@ export default {
 <style>
 :root {
   --sidebar-bg-color: #161e2e;
-  --sidebar-item-hover: #02E9E9;
+  --sidebar-item-hover: #02e9e9;
 }
 </style>
 
@@ -116,11 +150,27 @@ export default {
   overflow-y: scroll;
 }
 
+.section-styles {
+  padding-bottom: 10px;
+  cursor: pointer;
+}
+
+.section-title {
+  padding-right: 10px;
+  padding-left: 10px;
+  cursor: pointer;
+}
+
 .collapse-icon {
   position: fixed;
   bottom: 0;
   transition: 0.5s linear;
   margin-bottom: 20px;
+}
+.collapse-section {
+  position: absolute;
+  text-align: right;
+  transition: 0.2s linear;
 }
 .rotate-180 {
   transform: rotate(180deg);

@@ -1,12 +1,14 @@
 <template>
-  <div id="card" :style="getStyle().card">
-    <div id="header" :style="getStyle().header">
-      <h2>{{ getData().title }}</h2>
+  <div id="card" class="content" :style="getStyleSection(getStyle().card)">
+    <div id="header" :style="getStyleSection(getStyle().header)">
+      <h2 class="content-title">{{ getData().title }}</h2>
     </div>
-    <div id="body" :style="getStyle().body">
+    <div id="body" class="content__header" :style="getStyleSection(getStyle().body)">
       <h3>{{ getData().body }}</h3>
     </div>
-    <div id="button" @click="clicButton()" :style="getStyle().button">Aceptar</div>
+    <div id="button" class="content__button" @click="clicButton()" :style="getStyleSection(getStyle().button)">
+      {{ getData().button }}
+    </div>
   </div>
 </template>
 
@@ -18,14 +20,25 @@ export default {
   props: ["style", "data"],
 
   setup(props, { emit }) {
-
     const getStyle = () => {
-      for (const property in props.style) {
-        for (const subProperty in props.style[property]) {
-          style[property][subProperty] = props.style[property][subProperty];
+      for (const section in props.style) {
+        for (const category in props.style[section]) {
+          for (const property in props.style[section][category]) {
+            style[section][category][property] = props.style[section][category][property];
+          }
         }
       }
       return style;
+    };
+
+    const getStyleSection = (data) => {
+      var dataSection = {}
+      for (const property in data) {
+        for (const subProperty in data[property]) {
+          dataSection[subProperty] = data[property][subProperty];
+        }
+      }
+      return dataSection;
     };
 
     const getData = () => {
@@ -41,12 +54,27 @@ export default {
 
     return {
       getStyle,
+      getStyleSection,
       getData,
       clicButton,
     };
-  }
+  },
 };
 </script>
 
 <style lang="sass" scoped>
+.content
+  position: relative
+  text-align: center
+
+  &-title
+    margin-top: 0
+    padding-top: 5%
+    
+  &__header      
+    top: 0
+
+  &__button  
+    position: absolute      
+    bottom: 0
 </style>

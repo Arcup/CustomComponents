@@ -5,17 +5,17 @@
     </div>
 </template>
 <script>
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
 export default {
-    props: ["name", "value", "config"],
+    props: ["name", "value", "section", "config"],
     setup(props, {emit}) {
 
         const name = ref(props.name)
         const value = ref(props.value)
 
         const changeValue = () => {
-            emit("changeValue", props.name, value.value);
+            emit("changeValue", props.section, props.name, value.value);
         }
         
         return {
@@ -31,7 +31,7 @@ export default {
 input[type=text]{
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
-    border-radius: 20px;
+    border-radius: 10px;
     border: 1px solid white;
     color: black;
     width: 80%;
