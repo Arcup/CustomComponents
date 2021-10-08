@@ -38,10 +38,12 @@ export default {
         {
           name: "Card Information",
           component: "CCardInfo",
+          isActive: true,
         },
         {
           name: "Card Low",
           component: "CCardLow",
+          isActive: false,
         },
         
       ],
