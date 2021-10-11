@@ -11,6 +11,7 @@
         />
         ArComposition
       </h1>
+      <h4>{{ $t("sidebar.made") }}</h4>
     </section>
     <hr class="section__divider"/>
     <section class="section__list">
@@ -62,6 +63,9 @@ export default {
 </script>
 
 <style lang="sass" scoped>
+h4
+  color: white
+  margin-left: 0.5em
 .content
   top: 0
   left: 0
@@ -90,7 +94,7 @@ export default {
 
 .section__divider
   border: 0
-  display:block
+  display: block
   width: 96%             
   background-color:#FFF
   height: 1px
