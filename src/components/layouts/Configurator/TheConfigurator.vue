@@ -1,4 +1,4 @@
-<template> 
+<template>
   <div class="sidebar" :style="{ width: sidebarWidth }">
     <h1>
       <span v-if="!collapsed">
@@ -8,10 +8,10 @@
       </span>
     </h1>
     <div v-show="!collapsed">
-        <div v-for="section in sections" :key="section">
-          <p class="section-styles" @click="section.active = !section.active"> 
+        <div v-for="section in sections" :key="section.id">
+          <p class="section-styles" @click="section.active = !section.active">
            <label class="section-title">
-            {{ section.section.charAt(0).toUpperCase() + section.section.slice(1).replace("_", " ") }}
+            {{ section.section.charAt(0).toUpperCase() + section.section.slice(1).replace("_", " ") }} 
             </label>
            <span
             :class="{ 'rotate-180': section.active }"
@@ -21,7 +21,7 @@
             </span>
           </p>
           <div v-show="section.active">
-            <div v-for="data in section.data" :key="data">
+            <div v-for="data in section.data" :key="data.id">
               <li style="list-style-type: none; padding-left: 20px;">
                 <component
                   :is="data.component"
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import { reactive, ref, computed, watch, shallowRef } from "vue";
+import { reactive, ref, computed, watch } from "vue";
 import { indexStyles } from "./index.js";
 
 export default {
@@ -66,69 +66,49 @@ export default {
     const SIDEBAR_WIDTH = 270
     const SIDEBAR_WIDTH_COLLAPSED = 38
     const sidebarWidth = computed(() => `${collapsed.value ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}px`)
-    const resetData = ref({})
-    const resetDataFlag = ref(true)
 
-    // Remueve las referencias al objeto default
-    const removeReference = (object) => {
-      return JSON.parse(JSON.stringify(object))
-    };
-
-    const getStyleSections = (dataReset) => {
-      var arrayData = props.section
-      if(dataReset){
-        arrayData =  dataReset;
-      }
-
-      if(resetDataFlag.value ){
-        resetData.value = removeReference(arrayData);
-        resetDataFlag.value = false
-      }
-
+    const getStyleSections = () => {
       var styles = [];
-      for (const section in arrayData) {
+      var countIds = 0;
+      for (const section in props.section) {
         var active = false;
-        if (Object.keys(arrayData)[0] === section) {
+        if (countIds === 0) {
           active = true;
         }
         var sectionAppend = {
+          id: countIds,
           section: section,
           active: active,
           data: []
         }
-        
-        for (const property in arrayData[section]) {
+        for (const property in props.section[section]) {
           sectionAppend.data.push({
+            id: countIds,
             section: section,
             property: property,
-            component: shallowRef(indexStyles[property].component),
+            component: indexStyles[property].component,
             config: indexStyles[property].config,
-            value: arrayData[section][property]
+            value: props.section[section][property]
           });
+          countIds++;
         };
         styles.push(sectionAppend)
       }
       sections.value = styles
     };
-    
 
-    getStyleSections(false)
+    getStyleSections()
 
-    watch(() => props.section, () => {
-      getStyleSections(false)
-    });
-    watch(() => props.section, () => {
-      resetDataFlag.value = true;
+    watch(props.section, (count, prevCount) => {
       getStyleSections()
-    });
+    })    
 
     const changeValue = (section, property, newValue) => {
       emit("changeValue", section, property, newValue);
     };
 
     const resetComponent = () => {
-      getStyleSections(resetData.value)
-      emit("reset", resetData.value);
+      emit("reset");
     };
 
     return {
