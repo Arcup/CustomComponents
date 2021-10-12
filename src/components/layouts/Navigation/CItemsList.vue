@@ -7,6 +7,7 @@
           <span :class="{ 'rotate-180': !display }" class="list__title-icon">
             <i class="fas fa-angle-down"/>
           </span>
+          
         </h2>
         <ul class="sublist" v-if="display">
           <li
@@ -16,9 +17,6 @@
             @click="clickItem(item.name, item.component)"
           >
             {{ item.name }}
-            <span v-if="item.isActive" class="sublist__element-icon">
-              <i class="fas fa-circle"/>
-          </span>
           </li>
         </ul>
       </li>
@@ -46,22 +44,11 @@ export default {
     const display = ref(true);
 
     const clickItem = (name, component) => {
-      changeSelectElement(component);
       emit("clickItem", name, component);
     };
 
     const displayList = () => {
       display.value = !display.value;
-    };
-
-    const changeSelectElement = (name) => {
-      props.options.forEach((option) => {
-        if(option.component == name) {
-          option.isActive = true;
-        } else {
-          option.isActive = false;
-        }
-      })
     };
 
     return {
@@ -95,11 +82,14 @@ h2
       margin-top: 0.1em
       margin-left: 0.7em
       position: fixed
-      transition: 0.15s linear
+      transition: 0.2s linear
 .sublist
   list-style: none
   width: 90%
-  padding-left: 0.5em
+  padding-left: 1em
+  border-radius: 10px
+  background-color: #182133ff
+  transition: 0.1s linear
   &__element
     font-family: ComfortaaLight
     font-size: 0.8em
@@ -107,21 +97,11 @@ h2
     left: 0
     padding-top: 0.4em
     padding-bottom: 0.4em
-    padding-left: 0.4em
-    border-radius: 8px
     color: #fff
     cursor: pointer
-    &-icon
-      width: 0.2em
-      height: 0.2em
-      margin-top: 0.1em
-      margin-left: 0.7em
-      position: fixed
-      transition: 0.15s linear
-      color: #02e9e9
     &:hover
-      background-color: #79798724
-      transition: 0.16s linear
+      opacity: 0.7
+      transition: 0.1s linear
 .rotate-180 
   transform: rotate(180deg)
 </style>

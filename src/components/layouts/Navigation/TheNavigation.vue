@@ -11,7 +11,6 @@
         />
         ArComposition
       </h1>
-      <h4>{{ $t("sidebar.made") }}</h4>
     </section>
     <hr class="section__divider"/>
     <section class="section__list">
@@ -39,12 +38,10 @@ export default {
         {
           name: "Card Information",
           component: "CCardInfo",
-          isActive: true,
         },
         {
           name: "Card Low",
           component: "CCardLow",
-          isActive: false,
         },
         
       ],
@@ -63,9 +60,6 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-h4
-  color: white
-  margin-left: 0.5em
 .content
   top: 0
   left: 0
