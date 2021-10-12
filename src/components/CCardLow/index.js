@@ -1,37 +1,62 @@
 export const style = {
     "card": {
-        "width": "40%",
-        "border-color": "#02E9E9",
-        "border-width": "3px",
-        "border-radius": "25px",
-        "border-style": "solid",
-        "background": "#414141",
-        
+        "sizes_section": {
+            "width": "40%",
+            "height": "40%",
+            "border-width": "3px",
+            "border-radius": "25px",
+        },
+        "colors_section": {
+            "border-color": "#02E9E9",
+            "background": "#414141",
+        },
+        "others_section": {
+            "border-style": "solid",
+        }
     },
     "title": {
-        "border": "red",
-        "color": "black",
-        "font-size": "28px",
-        "font-weight": "bold",
+        "sizes_section": {
+            "font-size": "28px",
+        },
+        "colors_section": {
+            "border": "red",
+            "color": "white",
+        },
+        "others_section": {
+            "font-weight": "bold",
+        }
     },
     "subTitle": {
-        "border": "black",
-        "color": "white",
-        "font-size": "20px",
+        "sizes_section": {
+            "font-size": "20px",
+        },
+        "colors_section": {
+            "border": "black",
+            "color": "white",
+        },
     },
     "description": {
-        "border": "black",
-        "color": "white",
-        "font-size": "17px",
+        "sizes_section": {
+            "font-size": "17px",
+        },
+        "colors_section": {
+            "border": "black",
+            "color": "white",
+        }
     },
     "button": {
-        "border-color": "#02E9E9",
-        "color": "#414141",
-        "border-width": "3px",
-        "border-radius": "25px",
-        "border-style": "solid",
-        "background": "#02E9E9",
-        
+        "sizes_section": {
+            "border-width": "3px",
+            "border-radius": "25px",
+        },
+        "colors_section": {
+            "border-color": "#02E9E9",
+            "color": "#414141",
+            "background": "#02E9E9",
+        },
+        "others_section": {
+            "border-style": "solid",
+        }
     },
 }
 

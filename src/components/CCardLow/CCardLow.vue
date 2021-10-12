@@ -24,13 +24,22 @@ import { style, data } from "./index.js";
 export default {
   props: ["style", "data"],
   setup(props, { emit }) {
+    
+
     const getStyle = () => {
-      for (const property in props.style) {
-        for (const subProperty in props.style[property]) {
-          style[property][subProperty] = props.style[property][subProperty];
+      var dataSection = {}
+      for (const section in props.style) {
+        for (const category in props.style[section]) {
+          for (const property in props.style[section][category]) {
+            style[section][category][property] = props.style[section][category][property];
+            if (!dataSection[section]) {
+              dataSection[section] = {}
+            }
+            dataSection[section][property] =  props.style[section][category][property];
+          }
         }
       }
-      return style;
+      return dataSection;
     };
 
     const getData = () => {
@@ -48,6 +57,7 @@ export default {
       getStyle,
       getData,
       action,
+      props,
     };
   },
 };
