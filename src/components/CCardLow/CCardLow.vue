@@ -1,16 +1,16 @@
 <template>
-  <div class="zoom padding_y" :style="getStyleSection(getStyle().card)">
-    <div :style="getStyleSection(getStyle().subTitle)">
+  <div class="zoom padding_y" :style="getStyle().card">
+    <div :style="getStyle().subTitle">
       <div class="padding_x">{{ getData().subTitle }}</div>
     </div>
-    <div :style="getStyleSection(getStyle().title)">
+    <div :style="getStyle().title">
       <div class="padding_x">{{ getData().title }}</div>
     </div>
-    <div :style="getStyleSection(getStyle().description)">
+    <div :style="getStyle().description">
       <div class="padding_x">{{ getData().description }}</div>
     </div>
     <div class="padding_x padding_y">
-      <button @click="action()" class="action_button" :style="getStyleSection(getStyle().button)">
+      <button @click="action()" class="action_button" :style="getStyle().button">
         <strong>{{ getData().button }}</strong>
       </button>
     </div>
@@ -24,23 +24,19 @@ import { style, data } from "./index.js";
 export default {
   props: ["style", "data"],
   setup(props, { emit }) {
+    
 
     const getStyle = () => {
+      var dataSection = {}
       for (const section in props.style) {
         for (const category in props.style[section]) {
           for (const property in props.style[section][category]) {
             style[section][category][property] = props.style[section][category][property];
+            if (!dataSection[section]) {
+              dataSection[section] = {}
+            }
+            dataSection[section][property] =  props.style[section][category][property];
           }
-        }
-      }
-      return style;
-    };
-
-    const getStyleSection = (data) => {
-      var dataSection = {}
-      for (const property in data) {
-        for (const subProperty in data[property]) {
-          dataSection[subProperty] = data[property][subProperty];
         }
       }
       return dataSection;
@@ -59,7 +55,6 @@ export default {
 
     return {
       getStyle,
-      getStyleSection,
       getData,
       action,
       props,

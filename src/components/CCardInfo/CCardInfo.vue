@@ -1,12 +1,12 @@
 <template>
-  <div id="card" class="content" :style="getStyleSection(getStyle().card)">
-    <div id="header" :style="getStyleSection(getStyle().header)">
+  <div id="card" class="content" :style="getStyle().card">
+    <div id="header" :style="getStyle().header">
       <h2 class="content-title">{{ getData().title }}</h2>
     </div>
-    <div id="body" class="content__header" :style="getStyleSection(getStyle().body)">
+    <div id="body" class="content__header" :style="getStyle().body">
       <h3>{{ getData().body }}</h3>
     </div>
-    <div id="button" class="content__button" @click="clicButton()" :style="getStyleSection(getStyle().button)">
+    <div id="button" class="content__button" @click="clicButton()" :style="getStyle().button">
       {{ getData().button }}
     </div>
   </div>
@@ -20,22 +20,18 @@ export default {
   props: ["style", "data"],
 
   setup(props, { emit }) {
+
     const getStyle = () => {
+      var dataSection = {}
       for (const section in props.style) {
         for (const category in props.style[section]) {
           for (const property in props.style[section][category]) {
             style[section][category][property] = props.style[section][category][property];
+            if (!dataSection[section]) {
+              dataSection[section] = {}
+            }
+            dataSection[section][property] =  props.style[section][category][property];
           }
-        }
-      }
-      return style;
-    };
-
-    const getStyleSection = (data) => {
-      var dataSection = {}
-      for (const property in data) {
-        for (const subProperty in data[property]) {
-          dataSection[subProperty] = data[property][subProperty];
         }
       }
       return dataSection;
@@ -54,7 +50,6 @@ export default {
 
     return {
       getStyle,
-      getStyleSection,
       getData,
       clicButton,
     };

@@ -32,17 +32,12 @@ export default {
   },
   
   setup(props) {
-    // Remueve las referencias al objeto default
-    const removeReference = (object) => {
-      return JSON.parse(JSON.stringify(object))
-    };
 
     // Aisigna la información necesaria para comenzar a editar un nuevo componente
     const setComponent = (name, component) => {
       getNameComponent.value = name;
       getComponent.value = COMPONENTS[component].COMPONENT;
       getStyleComponent.value = COMPONENTS[component].STYLES;
-      resetValue = removeReference(COMPONENTS[component].STYLES)
 
       setSectionConfigurator(Object.keys(COMPONENTS[component].STYLES)[0], component);
     };
@@ -54,16 +49,13 @@ export default {
     };
 
     // Variables para el funcionamiento del configurador
-    const getSectionConfigurator = ref(COMPONENTS["CCardLow"].STYLES["card"]);
+    const getSectionConfigurator = ref(COMPONENTS["CCardInfo"].STYLES["card"]);
     const getNameSectionConfigurator = ref("card");
 
     // Variables para el funcionamiento del visor de componentes
-    const getComponent = shallowRef(COMPONENTS["CCardLow"].COMPONENT);
-    const getNameComponent = ref("Card Low");
-    const getStyleComponent = ref(COMPONENTS["CCardLow"].STYLES);
-
-    // Valor por default de la sección activa del configurador
-    var resetValue = removeReference(COMPONENTS["CCardLow"].STYLES)
+    const getComponent = shallowRef(COMPONENTS["CCardInfo"].COMPONENT);
+    const getNameComponent = ref("Card Information");
+    const getStyleComponent = ref(COMPONENTS["CCardInfo"].STYLES);
 
     // Recibe los cambios de la sección activa (configurador) y los aplica al componente
     const changeValueSection = (section, property, newValue) => {
@@ -71,9 +63,8 @@ export default {
     };
 
     // Reinicia la sección activa del configurador
-    const resetComponent = async () => {
-      getStyleComponent.value[getNameSectionConfigurator.value] = resetValue[getNameSectionConfigurator.value]
-      getSectionConfigurator.value = resetValue[getNameSectionConfigurator.value]
+    const resetComponent = (resetData) => {
+      getStyleComponent.value[getNameSectionConfigurator.value] = resetData
     };
 
     return {
