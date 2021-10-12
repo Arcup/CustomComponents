@@ -96,6 +96,7 @@ export default {
           active: active,
           data: []
         }
+        
         for (const property in arrayData[section]) {
           sectionAppend.data.push({
             section: section,
@@ -109,6 +110,7 @@ export default {
       }
       sections.value = styles
     };
+    
 
     getStyleSections(false)
 
