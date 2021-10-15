@@ -8,6 +8,7 @@
     />
     <TheNavigation @clic-item-list="setComponent" />
     <div id="container" class="container">
+      <CLanguage/>
       <h1>{{ getNameComponent }}</h1>
       <!-- <keep-alive> -->
       <component :is="getComponent" :style="getStyleComponent"></component>
@@ -19,6 +20,7 @@
 <script>
 import TheNavigation from "../components/layouts/Navigation/TheNavigation.vue";
 import TheConfigurator from "../components/layouts/Configurator/TheConfigurator.vue";
+import CLanguage from "../components/layouts/Global/CLanguage.vue"
 import { COMPONENTS } from "@/components/index.js";
 
 import { ref, shallowRef, reactive } from "vue";
@@ -29,6 +31,7 @@ export default {
   components: {
     TheNavigation,
     TheConfigurator,
+    CLanguage
   },
   
   setup(props) {
