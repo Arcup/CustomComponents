@@ -9,10 +9,14 @@
     <TheNavigation @clic-item-list="setComponent" />
     <div id="container" class="container">
       <CLanguage/>
+      <TheCodigator
+      :section="getSectionConfigurator"
+      />
       <h1>{{ getNameComponent }}</h1>
       <!-- <keep-alive> -->
       <component :is="getComponent" :style="getStyleComponent"></component>
       <!-- </keep-alive> -->
+      
     </div>
   </div>
 </template>
@@ -20,6 +24,7 @@
 <script>
 import TheNavigation from "../components/layouts/Navigation/TheNavigation.vue";
 import TheConfigurator from "../components/layouts/Configurator/TheConfigurator.vue";
+import TheCodigator from "../components/layouts/Codigator/TheCodigator.vue"
 import CLanguage from "../components/layouts/Global/CLanguage.vue"
 import { COMPONENTS } from "@/components/index.js";
 
@@ -31,6 +36,7 @@ export default {
   components: {
     TheNavigation,
     TheConfigurator,
+    TheCodigator,
     CLanguage
   },
   
