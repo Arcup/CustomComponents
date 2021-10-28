@@ -9,9 +9,6 @@
     <TheNavigation @clic-item-list="setComponent" />
     <div id="container" class="container">
       <CLanguage/>
-      <TheCodigator
-      :section="getSectionConfigurator"
-      />
       <h1>{{ getNameComponent }}</h1>
       <!-- <keep-alive> -->
       <component :is="getComponent" :style="getStyleComponent"></component>

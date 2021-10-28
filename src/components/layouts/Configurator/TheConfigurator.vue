@@ -1,4 +1,4 @@
-<template> 
+<template>
   <div class="sidebar" :style="{ width: sidebarWidth }">
     <h1>
       <span v-if="!collapsed">
@@ -8,34 +8,35 @@
       </span>
     </h1>
     <div v-show="!collapsed">
-        <div v-for="section in sections" :key="section">
-          <p class="section-styles" @click="section.active = !section.active"> 
-           <label class="section-title">
-            {{ section.section.charAt(0).toUpperCase() + section.section.slice(1).replace("_", " ") }}
-            </label>
-           <span
+      <div v-for="section in sections" :key="section">
+        <p class="section-styles" @click="section.active = !section.active">
+          <label class="section-title">
+            {{section.section.charAt(0).toUpperCase() + section.section.slice(1).replace("_", " ")
+            }}
+          </label>
+          <span
             :class="{ 'rotate-180': section.active }"
             class="collapse-section"
-            >
-              <i  class="fas fa-chevron-down" />
-            </span>
-          </p>
-          <div v-show="section.active">
-            <div v-for="data in section.data" :key="data">
-              <li style="list-style-type: none; padding-left: 20px;">
-                <component
-                  :is="data.component"
-                  :name="data.property"
-                  :value="data.value"
-                  :section="data.section"
-                  :config="data.config"
-                  @changeValue="changeValue"
-                >
-                </component>
-              </li>
-            </div>
+          >
+            <i class="fas fa-chevron-down" />
+          </span>
+        </p>
+        <div v-show="section.active">
+          <div v-for="data in section.data" :key="data">
+            <li style="list-style-type: none; padding-left: 20px">
+              <component
+                :is="data.component"
+                :name="data.property"
+                :value="data.value"
+                :section="data.section"
+                :config="data.config"
+                @changeValue="changeValue"
+              >
+              </component>
+            </li>
           </div>
         </div>
+      </div>
     </div>
 
     <h1>
@@ -59,30 +60,51 @@ export default {
   props: ["name", "section"],
   setup(props, { emit }) {
     const name = ref(props.name);
-    const sections = ref([])
+    const sections = ref([]);
 
-    const collapsed = ref(false)
-    const toggleSidebar = () => (collapsed.value = !collapsed.value)
-    const SIDEBAR_WIDTH = 270
-    const SIDEBAR_WIDTH_COLLAPSED = 38
-    const sidebarWidth = computed(() => `${collapsed.value ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}px`)
-    const resetData = ref({})
-    const resetDataFlag = ref(true)
+    const collapsed = ref(false);
+    const toggleSidebar = () => (collapsed.value = !collapsed.value);
+    const SIDEBAR_WIDTH = 270;
+    const SIDEBAR_WIDTH_COLLAPSED = 38;
+    const sidebarWidth = computed(
+      () => `${collapsed.value ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}px`
+    );
+
+    //  Recibe una palabra y la traduce desde el objeto i18n
+    const changeLanguage = computed(() => {
+      var newArray = [];
+      section.forEach(element => {
+        var aux = '';
+        switch(element.section) {
+          case "sizes_section":
+            aux = $t("configurator.size");
+          break;
+          default: 
+          aux = 'Soy una sección'
+          break;
+        }
+        newArray.push(aux);
+      });
+      return newArray;
+    });
+
+    const resetData = ref({});
+    const resetDataFlag = ref(true);
 
     // Remueve las referencias al objeto default
     const removeReference = (object) => {
-      return JSON.parse(JSON.stringify(object))
+      return JSON.parse(JSON.stringify(object));
     };
 
     const getStyleSections = (dataReset) => {
-      var arrayData = props.section
-      if(dataReset){
-        arrayData =  dataReset;
+      var arrayData = props.section;
+      if (dataReset) {
+        arrayData = dataReset;
       }
 
-      if(resetDataFlag.value ){
+      if (resetDataFlag.value) {
         resetData.value = removeReference(arrayData);
-        resetDataFlag.value = false
+        resetDataFlag.value = false;
       }
 
       var styles = [];
@@ -94,40 +116,45 @@ export default {
         var sectionAppend = {
           section: section,
           active: active,
-          data: []
-        }
-        
+          data: [],
+        };
+
         for (const property in arrayData[section]) {
           sectionAppend.data.push({
             section: section,
             property: property,
             component: shallowRef(indexStyles[property].component),
             config: indexStyles[property].config,
-            value: arrayData[section][property]
+            value: arrayData[section][property],
           });
-        };
-        styles.push(sectionAppend)
+        }
+        styles.push(sectionAppend);
       }
-      sections.value = styles
+      sections.value = styles;
     };
-    
 
-    getStyleSections(false)
+    getStyleSections(false);
 
-    watch(() => props.section, () => {
-      getStyleSections(false)
-    });
-    watch(() => props.section, () => {
-      resetDataFlag.value = true;
-      getStyleSections()
-    });
+    watch(
+      () => props.section,
+      () => {
+        getStyleSections(false);
+      }
+    );
+    watch(
+      () => props.section,
+      () => {
+        resetDataFlag.value = true;
+        getStyleSections();
+      }
+    );
 
     const changeValue = (section, property, newValue) => {
       emit("changeValue", section, property, newValue);
     };
 
     const resetComponent = () => {
-      getStyleSections(resetData.value)
+      getStyleSections(resetData.value);
       emit("reset", resetData.value);
     };
 
@@ -135,6 +162,7 @@ export default {
       collapsed,
       toggleSidebar,
       sidebarWidth,
+      changeLanguage,
       name,
       props,
       getStyleSections,

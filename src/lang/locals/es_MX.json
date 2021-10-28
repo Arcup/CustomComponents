@@ -2,5 +2,8 @@
     "sidebar": {
         "title": "Hola, vengo desde el json",
         "made": "Hecho en Arcup"
+    },
+    "configurator": {
+        "size": "Sección de tamaño"
     }
 }
