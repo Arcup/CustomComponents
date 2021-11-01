@@ -3,26 +3,45 @@
     <h1>
       <span v-if="!collapsed">
         {{ name.charAt(0).toUpperCase() + name.slice(1) }}
-
-        <button @click="resetComponent()">RESET</button>
       </span>
     </h1>
     <div v-show="!collapsed">
-        <div v-for="section in sections" :key="section.id">
+      <div class="padding_buttons"></div>
+      <button 
+        @click="stylesOrData='STYLE'"
+        style="margin-right: 1rem;"
+        :class="{ 
+          'button_select': stylesOrData ==='STYLE',
+          'button_no_select': stylesOrData !=='STYLE' 
+        }">
+          Styles
+      </button>
+      <button 
+        @click="stylesOrData='DATA'"
+        :class="{ 
+          'button_select': stylesOrData ==='DATA',
+          'button_no_select': stylesOrData !=='DATA' 
+        }">
+          Data
+      </button>
+      <div v-show="stylesOrData === 'STYLE'">
+        <button @click="resetComponent()" class="button_no_select" style="margin-top: 1rem">Reset Styles</button>
+        <div v-for="section in sections" :key="section">
           <p class="section-styles" @click="section.active = !section.active">
-           <label class="section-title">
-            {{ section.section.charAt(0).toUpperCase() + section.section.slice(1).replace("_", " ") }} 
+            <label class="section-title">
+              {{section.section.charAt(0).toUpperCase() + section.section.slice(1).replace("_", " ")
+              }}
             </label>
-           <span
-            :class="{ 'rotate-180': section.active }"
-            class="collapse-section"
+            <span
+              :class="{ 'rotate-180': section.active }"
+              class="collapse-section"
             >
-              <i  class="fas fa-chevron-down" />
+              <i class="fas fa-chevron-down" />
             </span>
           </p>
           <div v-show="section.active">
-            <div v-for="data in section.data" :key="data.id">
-              <li style="list-style-type: none; padding-left: 20px;">
+            <div v-for="data in section.data" :key="data">
+              <li style="list-style-type: none; padding-left: 20px">
                 <component
                   :is="data.component"
                   :name="data.property"
@@ -36,6 +55,20 @@
             </div>
           </div>
         </div>
+      </div>
+      <div v-show="stylesOrData ==='DATA'" style="padding-top: 2rem">
+        <div v-for="data in datas" :key="data">
+          <li style="list-style-type: none; padding-left: 20px">
+            <component
+              :is="data.component"
+              :name="data.property"
+              :value="data.value"
+              @changeValue="changeValueData"
+            >
+            </component>
+          </li>
+        </div>
+      </div>
     </div>
 
     <h1>
@@ -52,75 +85,144 @@
 </template>
 
 <script>
-import { reactive, ref, computed, watch } from "vue";
+import { reactive, ref, computed, watch, shallowRef } from "vue";
 import { indexStyles } from "./index.js";
 
 export default {
-  props: ["name", "section"],
+  props: ["name", "section", "data"],
   setup(props, { emit }) {
     const name = ref(props.name);
-    const sections = ref([])
+    const sections = ref([]);
+    const datas = ref([]);
 
-    const collapsed = ref(false)
-    const toggleSidebar = () => (collapsed.value = !collapsed.value)
-    const SIDEBAR_WIDTH = 270
-    const SIDEBAR_WIDTH_COLLAPSED = 38
-    const sidebarWidth = computed(() => `${collapsed.value ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}px`)
+    const collapsed = ref(false);
+    const toggleSidebar = () => (collapsed.value = !collapsed.value);
+    const SIDEBAR_WIDTH = 270;
+    const SIDEBAR_WIDTH_COLLAPSED = 38;
+    const sidebarWidth = computed(() => `${collapsed.value ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}px`);
 
-    const getStyleSections = () => {
+    const stylesOrData = ref("STYLE");
+
+    //  Recibe una palabra y la traduce desde el objeto i18n
+    const changeLanguage = computed(() => {
+
+      // No se si esta forma de hacer la internacionalización se viable
+
+      var newArray = [];
+      section.forEach(element => {
+        var aux = '';
+        switch(element.section) {
+          case "sizes_section":
+            aux = $t("configurator.size");
+          break;
+          default: 
+          aux = 'Soy una sección'
+          break;
+        }
+        newArray.push(aux);
+      });
+      return newArray;
+    });
+
+    const resetData = ref({});
+    const resetDataFlag = ref(true);
+
+    // Remueve las referencias al objeto default
+    const removeReference = (object) => {
+      return JSON.parse(JSON.stringify(object));
+    };
+
+    const getStyleSections = (dataReset) => {
+      var arrayData = props.section;
+      if (dataReset) {
+        arrayData = dataReset;
+      }
+
+      if (resetDataFlag.value) {
+        resetData.value = removeReference(arrayData);
+        resetDataFlag.value = false;
+      }
+
       var styles = [];
-      var countIds = 0;
-      for (const section in props.section) {
+      for (const section in arrayData) {
         var active = false;
-        if (countIds === 0) {
+        if (Object.keys(arrayData)[0] === section) {
           active = true;
         }
         var sectionAppend = {
-          id: countIds,
           section: section,
           active: active,
-          data: []
-        }
-        for (const property in props.section[section]) {
+          data: [],
+        };
+
+        for (const property in arrayData[section]) {
           sectionAppend.data.push({
-            id: countIds,
             section: section,
             property: property,
-            component: indexStyles[property].component,
+            component: shallowRef(indexStyles[property].component),
             config: indexStyles[property].config,
-            value: props.section[section][property]
+            value: arrayData[section][property],
           });
-          countIds++;
-        };
-        styles.push(sectionAppend)
+        }
+        styles.push(sectionAppend);
       }
-      sections.value = styles
+      sections.value = styles;
     };
 
-    getStyleSections()
+    const getDataComponent = () => {
+      var datasAux = [];
+      for (const property in props.data) {
+        datasAux.push({
+          property: property,
+          component: shallowRef(indexStyles["DATA_FIELD"].component),
+          value: props.data[property],
+        });
+      }      
+      datas.value = datasAux;
+    };
 
-    watch(props.section, (count, prevCount) => {
-      getStyleSections()
-    })    
+    getStyleSections(false);
+    getDataComponent();
+
+    watch(() => props.section, () => {
+        getStyleSections(false);
+    });
+    watch(() => props.section, () => {
+      resetDataFlag.value = true;
+      getStyleSections();
+    });
+    watch(() => props.data, () => {
+        getDataComponent();
+    });
 
     const changeValue = (section, property, newValue) => {
-      emit("changeValue", section, property, newValue);
+      emit("changeValueStyle", section, property, newValue);
+    };
+
+    const changeValueData = (section, property, newValue) => {
+      emit("changeValueData", property, newValue);
     };
 
     const resetComponent = () => {
-      emit("reset");
+      getStyleSections(resetData.value);
+      emit("reset", resetData.value);
     };
 
     return {
       collapsed,
+      stylesOrData,
       toggleSidebar,
       sidebarWidth,
+      changeLanguage,
       name,
       props,
       getStyleSections,
+      getDataComponent,
       changeValue,
+      changeValueData,
       resetComponent,
       sections,
+      datas,
     };
   },
 };
@@ -175,10 +277,21 @@ export default {
 .rotate-180 {
   transform: rotate(180deg);
 }
-button {
-  background-color: var(--sidebar-item-hover);
-  border: 0px;
+.button_select {
+  background: var(--sidebar-item-hover);
+  border: 2px;
   color: var(--sidebar-bg-color);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
+  cursor: pointer;
+}
+.button_no_select {
+  background: var(--sidebar-bg-color);
+  color: var(--sidebar-item-hover);
+  border: 2px solid var(--sidebar-item-hover);
   border-radius: 10px;
   padding: 10px;
   font-size: 16px;

@@ -55,5 +55,12 @@ export const indexStyles = {
         "component": forms["INPUT_TEXT"],
         "config": {}
     },
+
+
+    // DEFAULT TEXT FIELD
+    "DATA_FIELD": {
+        "component": forms["TEXT_AREA"],
+        "config": {}
+    },
         
 }

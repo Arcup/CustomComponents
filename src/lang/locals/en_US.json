@@ -1,0 +1,9 @@
+{
+    "sidebar": {
+        "title": "Hello, I'm a title",
+        "made": "Made in Arcup"
+    },
+    "configurator": {
+        "size": "Sizes section"
+    }
+}

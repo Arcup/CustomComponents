@@ -1,17 +1,21 @@
 <template>
-  <div>
+  <div class="">
     <TheConfigurator
       :name="getNameSectionConfigurator"
       :section="getSectionConfigurator"
-      @changeValue="changeValueSection"
+      :data="getDataConfigurator"
+      @changeValueStyle="changeValueSection"
+      @changeValueData="changeValueData"
       @reset="resetComponent"
     />
     <TheNavigation @clic-item-list="setComponent" />
     <div id="container" class="container">
-      <h1>{{ getNameComponent }}</h1>
+      <CLanguage />
+      <h1 class="title_component">{{ getNameComponent }}</h1>
       <!-- <keep-alive> -->
-      <component :is="getComponent" :style="getStyleComponent"></component>
+      <component :is="getComponent" :style="getStyleComponent" :data="getDataComponent"></component>
       <!-- </keep-alive> -->
+      <!-- <TheCodigator :section="getComponent" /> -->
     </div>
   </div>
 </template>
@@ -19,6 +23,8 @@
 <script>
 import TheNavigation from "../components/layouts/Navigation/TheNavigation.vue";
 import TheConfigurator from "../components/layouts/Configurator/TheConfigurator.vue";
+import TheCodigator from "../components/layouts/Codigator/TheCodigator.vue"
+import CLanguage from "../components/layouts/Global/CLanguage.vue"
 import { COMPONENTS } from "@/components/index.js";
 
 import { ref, shallowRef, reactive } from "vue";
@@ -29,20 +35,18 @@ export default {
   components: {
     TheNavigation,
     TheConfigurator,
+    TheCodigator,
+    CLanguage
   },
   
   setup(props) {
-    // Remueve las referencias al objeto default
-    const removeReference = (object) => {
-      return JSON.parse(JSON.stringify(object))
-    };
 
     // Aisigna la información necesaria para comenzar a editar un nuevo componente
     const setComponent = (name, component) => {
       getNameComponent.value = name;
       getComponent.value = COMPONENTS[component].COMPONENT;
       getStyleComponent.value = COMPONENTS[component].STYLES;
-      resetValue = removeReference(COMPONENTS[component].STYLES)
+      getDataComponent.value = COMPONENTS[component].DATA;
 
       setSectionConfigurator(Object.keys(COMPONENTS[component].STYLES)[0], component);
     };
@@ -51,39 +55,45 @@ export default {
     const setSectionConfigurator = (firstSectionStyles, component) => {
       getNameSectionConfigurator.value = firstSectionStyles;
       getSectionConfigurator.value = COMPONENTS[component].STYLES[firstSectionStyles];
+      getDataConfigurator.value = COMPONENTS[component].DATA;
     };
 
     // Variables para el funcionamiento del configurador
-    const getSectionConfigurator = ref(COMPONENTS["CCardLow"].STYLES["card"]);
+    const getSectionConfigurator = ref(COMPONENTS["CCardInfo"].STYLES["card"]);
+    const getDataConfigurator = ref(COMPONENTS["CCardInfo"].DATA);
     const getNameSectionConfigurator = ref("card");
 
     // Variables para el funcionamiento del visor de componentes
-    const getComponent = shallowRef(COMPONENTS["CCardLow"].COMPONENT);
-    const getNameComponent = ref("Card Low");
-    const getStyleComponent = ref(COMPONENTS["CCardLow"].STYLES);
+    const getComponent = shallowRef(COMPONENTS["CCardInfo"].COMPONENT);
+    const getNameComponent = ref("Card Information");
+    const getStyleComponent = ref(COMPONENTS["CCardInfo"].STYLES);
+    const getDataComponent = ref(COMPONENTS["CCardInfo"].DATA);
 
-    // Valor por default de la sección activa del configurador
-    var resetValue = removeReference(COMPONENTS["CCardLow"].STYLES)
-
-    // Recibe los cambios de la sección activa (configurador) y los aplica al componente
+    // Recibe los cambios de la sección activa (configurador / Styles) y los aplica al componente
     const changeValueSection = (section, property, newValue) => {
       getStyleComponent.value[getNameSectionConfigurator.value][section][property] = newValue;
     };
+    // Recibe los cambios de la label activa (configurador / data) y los aplica al componente
+    const changeValueData = (section, newValue) => {
+      getDataComponent.value[section] = newValue;
+    };
 
-    // Reinicia la sección activa del configurador
-    const resetComponent = async () => {
-      getStyleComponent.value[getNameSectionConfigurator.value] = resetValue[getNameSectionConfigurator.value]
-      getSectionConfigurator.value = resetValue[getNameSectionConfigurator.value]
+    // Reinicia la sección activa del configurador (Styles)
+    const resetComponent = (resetData) => {
+      getStyleComponent.value[getNameSectionConfigurator.value] = resetData
     };
 
     return {
       setComponent,
       changeValueSection,
+      changeValueData,
       resetComponent,
       getNameComponent,
       getComponent,
       getStyleComponent,
+      getDataComponent,
       getSectionConfigurator,
+      getDataConfigurator,
       getNameSectionConfigurator,
     };
   },
@@ -92,6 +102,12 @@ export default {
 
 <style lang="sass" scoped>
 .container
-  position: relative
-  margin-left: 18rem
+  display: flex
+  align-items: center
+  flex-direction: column
+  justify-content: center
+
+.title_component
+  padding-top: 1rem
+
 </style>
