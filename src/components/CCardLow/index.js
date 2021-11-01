@@ -62,7 +62,7 @@ export const style = {
 
 export const data = {
     "title": "Unlimited music now",
-    "subTitle": "Good news!",
+    "subtitle": "Good news!",
     "description": "Listen to your favorite artists and albums whenever and wherever, online and offline.",
     "button": "LISTEN NOW",
 }

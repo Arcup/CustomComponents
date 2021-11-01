@@ -7,13 +7,13 @@
         <prism language="javascript">{{ code_js }}</prism>
       </div>
       <div id="content_sass">
-          
+          <prism language="css">{{ code_sass }}</prism>
       </div>
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import Prism from 'vue-prism-component'
 
 export default {
@@ -24,30 +24,27 @@ export default {
     },
 
     setup(props) {
+
         const section = ref(props.section)
 
-        const code_html = ref(
-            '<template>' +
-                '<div id="card" class="content" :style="getStyle().card">' +
-                    '<div id="header" :style="getStyle().header">' +
-                    '<h2 class="content-title">{{ getData().title }}</h2>' +
-                    '</div>' +
-                    '<div id="body" class="content__header" :style="getStyle().body">' +
-                        '<h3>{{ getData().body }}</h3>' +
-                    '</div>' +
-                    '<div id="button" class="content__button" @click="clicButton()" :style="getStyle().button">' +
-                        '{{ getData().button }}' +
-                    '</div>' +
-                '</div>' +
-            '</template>')
+        const code_html = ref("")
 
-        const code_js = ref('const code_js = ref()')
+        const code_js = ref("")
 
-        const code_sass = ref('.container' +
-                                'position: relative' +
-                                'margin-right: 18rem' +
-                                'text-align: right')
+        const code_sass = ref("")
 
+        const readCode = () => {
+            const PATH = "./../../../../assets/img/navigation/formaLogo-Arcup.png"
+            console.log(PATH);
+            const reader = new FileReader();
+            reader.onload = e => console.log(e.target);
+            reader.readAsText(new Blob(props.section.__file));
+        }
+
+        readCode()
+        watch(() => props.section, () => {
+            readCode();
+        });
         return {
             section,
             code_html,
