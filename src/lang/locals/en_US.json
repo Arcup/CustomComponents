@@ -4,6 +4,8 @@
         "made": "Made in Arcup"
     },
     "configurator": {
-        "size": "Sizes section"
+        "size": "Sizes section",
+        "color": "Color section",
+        "other": "Others section"
     }
 }

@@ -4,6 +4,8 @@
         "made": "Hecho en Arcup"
     },
     "configurator": {
-        "size": "Sección de tamaño"
+        "size": "Sección de tamaño",
+        "color": "Sección de colores",
+        "other": "Otros estilos"
     }
 }

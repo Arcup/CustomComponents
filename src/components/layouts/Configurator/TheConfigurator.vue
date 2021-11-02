@@ -8,10 +8,11 @@
       </span>
     </h1>
     <div v-show="!collapsed">
-      <div v-for="section in sections" :key="section">
+      <div v-for="(section, index) in sections" :key="index">
         <p class="section-styles" @click="section.active = !section.active">
           <label class="section-title">
-            {{section.section.charAt(0).toUpperCase() + section.section.slice(1).replace("_", " ")
+            {{
+              arrayTranslate[index]
             }}
           </label>
           <span
@@ -53,7 +54,7 @@
 </template>
 
 <script>
-import { reactive, ref, computed, watch, shallowRef } from "vue";
+import { reactive, ref, computed, watch, shallowRef, onMounted } from "vue";
 import { indexStyles } from "./index.js";
 
 export default {
@@ -71,22 +72,25 @@ export default {
     );
 
     //  Recibe una palabra y la traduce desde el objeto i18n
-    const changeLanguage = computed(() => {
-      var newArray = [];
-      section.forEach(element => {
-        var aux = '';
-        switch(element.section) {
+    const arrayTranslate = ref([]);
+    const changeLanguage = () => {
+      section.forEach((element) => {
+        var aux = "";
+        switch (element.section) {
           case "sizes_section":
             aux = $t("configurator.size");
-          break;
-          default: 
-          aux = 'Soy una sección'
-          break;
+            break;
+          case "colors_section":
+            aux = $t("configurator.color");
+          case "others_section":
+            aux = $t("configurator.other");
+          default:
+            aux = "Soy una sección";
+            break;
         }
-        newArray.push(aux);
       });
-      return newArray;
-    });
+      arrayTranslate.push(aux);
+    };
 
     const resetData = ref({});
     const resetDataFlag = ref(true);
@@ -158,17 +162,18 @@ export default {
       emit("reset", resetData.value);
     };
 
+    onMounted(changeLanguage);
     return {
       collapsed,
       toggleSidebar,
       sidebarWidth,
-      changeLanguage,
       name,
       props,
       getStyleSections,
       changeValue,
       resetComponent,
       sections,
+      arrayTranslate,
     };
   },
 };
