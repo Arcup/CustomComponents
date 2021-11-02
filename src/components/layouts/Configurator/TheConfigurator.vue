@@ -3,39 +3,70 @@
     <h1>
       <span v-if="!collapsed">
         {{ name.charAt(0).toUpperCase() + name.slice(1) }}
-
-        <button @click="resetComponent()">RESET</button>
       </span>
     </h1>
     <div v-show="!collapsed">
-      <div v-for="(section, index) in sections" :key="index">
-        <p class="section-styles" @click="section.active = !section.active">
-          <label class="section-title">
-            {{
-              arrayTranslate[index]
-            }}
-          </label>
-          <span
-            :class="{ 'rotate-180': section.active }"
-            class="collapse-section"
-          >
-            <i class="fas fa-chevron-down" />
-          </span>
-        </p>
-        <div v-show="section.active">
-          <div v-for="data in section.data" :key="data">
-            <li style="list-style-type: none; padding-left: 20px">
-              <component
-                :is="data.component"
-                :name="data.property"
-                :value="data.value"
-                :section="data.section"
-                :config="data.config"
-                @changeValue="changeValue"
-              >
-              </component>
-            </li>
+      <div class="padding_buttons"></div>
+      <button 
+        @click="stylesOrData='STYLE'"
+        style="margin-right: 1rem;"
+        :class="{ 
+          'button_select': stylesOrData ==='STYLE',
+          'button_no_select': stylesOrData !=='STYLE' 
+        }">
+          Styles
+      </button>
+      <button 
+        @click="stylesOrData='DATA'"
+        :class="{ 
+          'button_select': stylesOrData ==='DATA',
+          'button_no_select': stylesOrData !=='DATA' 
+        }">
+          Data
+      </button>
+      <div v-show="stylesOrData === 'STYLE'">
+        <button @click="resetComponent()" class="button_no_select" style="margin-top: 1rem">Reset Styles</button>
+        <div v-for="section in sections" :key="section">
+          <p class="section-styles" @click="section.active = !section.active">
+            <label class="section-title">
+              {{section.section.charAt(0).toUpperCase() + section.section.slice(1).replace("_", " ")
+              }}
+            </label>
+            <span
+              :class="{ 'rotate-180': section.active }"
+              class="collapse-section"
+            >
+              <i class="fas fa-chevron-down" />
+            </span>
+          </p>
+          <div v-show="section.active">
+            <div v-for="data in section.data" :key="data">
+              <li style="list-style-type: none; padding-left: 20px">
+                <component
+                  :is="data.component"
+                  :name="data.property"
+                  :value="data.value"
+                  :section="data.section"
+                  :config="data.config"
+                  @changeValue="changeValue"
+                >
+                </component>
+              </li>
+            </div>
           </div>
+        </div>
+      </div>
+      <div v-show="stylesOrData ==='DATA'" style="padding-top: 2rem">
+        <div v-for="data in datas" :key="data">
+          <li style="list-style-type: none; padding-left: 20px">
+            <component
+              :is="data.component"
+              :name="data.property"
+              :value="data.value"
+              @changeValue="changeValueData"
+            >
+            </component>
+          </li>
         </div>
       </div>
     </div>
@@ -58,25 +89,29 @@ import { reactive, ref, computed, watch, shallowRef, onMounted } from "vue";
 import { indexStyles } from "./index.js";
 
 export default {
-  props: ["name", "section"],
+  props: ["name", "section", "data"],
   setup(props, { emit }) {
     const name = ref(props.name);
     const sections = ref([]);
+    const datas = ref([]);
 
     const collapsed = ref(false);
     const toggleSidebar = () => (collapsed.value = !collapsed.value);
     const SIDEBAR_WIDTH = 270;
     const SIDEBAR_WIDTH_COLLAPSED = 38;
-    const sidebarWidth = computed(
-      () => `${collapsed.value ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}px`
-    );
+    const sidebarWidth = computed(() => `${collapsed.value ? SIDEBAR_WIDTH_COLLAPSED : SIDEBAR_WIDTH}px`);
+
+    const stylesOrData = ref("STYLE");
 
     //  Recibe una palabra y la traduce desde el objeto i18n
-    const arrayTranslate = ref([]);
-    const changeLanguage = () => {
-      section.forEach((element) => {
-        var aux = "";
-        switch (element.section) {
+    const changeLanguage = computed(() => {
+
+      // No se si esta forma de hacer la internacionalización se viable
+
+      var newArray = [];
+      section.forEach(element => {
+        var aux = '';
+        switch(element.section) {
           case "sizes_section":
             aux = $t("configurator.size");
             break;
@@ -90,7 +125,7 @@ export default {
         }
       });
       arrayTranslate.push(aux);
-    };
+    });
 
     const resetData = ref({});
     const resetDataFlag = ref(true);
@@ -137,24 +172,38 @@ export default {
       sections.value = styles;
     };
 
-    getStyleSections(false);
+    const getDataComponent = () => {
+      var datasAux = [];
+      for (const property in props.data) {
+        datasAux.push({
+          property: property,
+          component: shallowRef(indexStyles["DATA_FIELD"].component),
+          value: props.data[property],
+        });
+      }      
+      datas.value = datasAux;
+    };
 
-    watch(
-      () => props.section,
-      () => {
+    getStyleSections(false);
+    getDataComponent();
+
+    watch(() => props.section, () => {
         getStyleSections(false);
-      }
-    );
-    watch(
-      () => props.section,
-      () => {
-        resetDataFlag.value = true;
-        getStyleSections();
-      }
-    );
+    });
+    watch(() => props.section, () => {
+      resetDataFlag.value = true;
+      getStyleSections();
+    });
+    watch(() => props.data, () => {
+        getDataComponent();
+    });
 
     const changeValue = (section, property, newValue) => {
-      emit("changeValue", section, property, newValue);
+      emit("changeValueStyle", section, property, newValue);
+    };
+
+    const changeValueData = (section, property, newValue) => {
+      emit("changeValueData", property, newValue);
     };
 
     const resetComponent = () => {
@@ -165,15 +214,18 @@ export default {
     onMounted(changeLanguage);
     return {
       collapsed,
+      stylesOrData,
       toggleSidebar,
       sidebarWidth,
       name,
       props,
       getStyleSections,
+      getDataComponent,
       changeValue,
+      changeValueData,
       resetComponent,
       sections,
-      arrayTranslate,
+      datas,
     };
   },
 };
@@ -228,10 +280,21 @@ export default {
 .rotate-180 {
   transform: rotate(180deg);
 }
-button {
-  background-color: var(--sidebar-item-hover);
-  border: 0px;
+.button_select {
+  background: var(--sidebar-item-hover);
+  border: 2px;
   color: var(--sidebar-bg-color);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
+  cursor: pointer;
+}
+.button_no_select {
+  background: var(--sidebar-bg-color);
+  color: var(--sidebar-item-hover);
+  border: 2px solid var(--sidebar-item-hover);
   border-radius: 10px;
   padding: 10px;
   font-size: 16px;
